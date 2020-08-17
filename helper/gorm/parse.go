@@ -1,6 +1,7 @@
-package gorm
+package helper
 
 import (
+	"context"
 	"strings"
 
 	"github.com/jinzhu/gorm"
@@ -8,7 +9,7 @@ import (
 	"github.com/go-framework/db"
 )
 
-func parseQuery(db *gorm.DB, conditions *db.Conditions) *gorm.DB {
+func ParseQuery(db *gorm.DB, conditions *db.Conditions) *gorm.DB {
 	if conditions.Parsed {
 		return db
 	}
@@ -67,4 +68,11 @@ func parseQuery(db *gorm.DB, conditions *db.Conditions) *gorm.DB {
 	}
 
 	return _db
+}
+
+func ParseContext(ctx context.Context, db_ *gorm.DB) *gorm.DB {
+	// debug
+	debug := db.GetDebugFromContext(ctx)
+	db_ = db_.LogMode(debug)
+	return db_
 }
