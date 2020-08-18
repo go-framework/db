@@ -9,6 +9,10 @@ import (
 	"github.com/go-framework/db"
 )
 
+const (
+	TableNameKey = "table"
+)
+
 func ParseQuery(db *gorm.DB, conditions *db.Conditions) *gorm.DB {
 	if conditions.Parsed {
 		return db
@@ -73,6 +77,12 @@ func ParseQuery(db *gorm.DB, conditions *db.Conditions) *gorm.DB {
 func ParseContext(ctx context.Context, db_ *gorm.DB) *gorm.DB {
 	// debug
 	debug := db.GetDebugFromContext(ctx)
-	db_ = db_.LogMode(debug)
-	return db_
+	var _db = db_.LogMode(debug)
+	// table
+	table := db.GetTableFromContext(ctx)
+	if len(table) > 0 {
+		_db = _db.Table(table)
+		_db.InstantSet(TableNameKey, table)
+	}
+	return _db
 }
