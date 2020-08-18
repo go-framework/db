@@ -36,7 +36,7 @@ func List(ctx context.Context, db *gorm.DB, conditions *db.Conditions, list inte
 	return
 }
 
-func Find(ctx context.Context, db *gorm.DB, conditions *db.Conditions, object interface{}) (_db *gorm.DB, err error) {
+func One(ctx context.Context, db *gorm.DB, conditions *db.Conditions, object interface{}) (_db *gorm.DB, err error) {
 	_db = ParseContext(ctx, db)
 	_db = ParseQuery(_db, conditions)
 
