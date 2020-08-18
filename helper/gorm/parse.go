@@ -14,6 +14,9 @@ const (
 )
 
 func ParseQuery(db *gorm.DB, conditions *db.Conditions) *gorm.DB {
+	if conditions == nil{
+		return db
+	}
 	if conditions.Parsed {
 		return db
 	}
