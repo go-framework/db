@@ -8,11 +8,10 @@ import (
 	"github.com/go-framework/db"
 )
 
-func Delete(ctx context.Context, in *gorm.DB, data interface{}, condition ...db.Condition) (_db *gorm.DB, err error) {
+func Delete(ctx context.Context, in *gorm.DB, data interface{}, conditions *db.Conditions) (_db *gorm.DB, err error) {
 	_db = ParseContext(ctx, in)
-	if len(condition) > 0 {
-		_db = ParseQuery(_db, db.NewConditions(condition...))
-	}
+	_db = ParseQuery(_db, conditions)
+
 	if _, ok := _db.Get(TableNameKey); !ok {
 		_db = _db.Model(data)
 	}

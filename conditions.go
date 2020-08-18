@@ -23,6 +23,10 @@ func NewConditions(condition ...Condition) *Conditions {
 	return &conditions
 }
 
+func (conditions *Conditions) SetParsed(parsed bool) {
+	conditions.Parsed = parsed
+}
+
 func (conditions *Conditions) NewPagination() *Pagination {
 	p := Pagination{
 		Offset: uint(conditions.Offset),

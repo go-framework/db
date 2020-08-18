@@ -12,12 +12,6 @@ func (f conditionFunc) apply(condition *Conditions) {
 	f(condition)
 }
 
-func WithConditions(conditions *Conditions) Condition {
-	return conditionFunc(func(conditions_ *Conditions) {
-		conditions_ = conditions
-	})
-}
-
 func Limit(limit int) Condition {
 	return conditionFunc(func(conditions *Conditions) {
 		conditions.Limit = limit
@@ -69,5 +63,11 @@ func Or(or ...interface{}) Condition {
 func Not(not ...interface{}) Condition {
 	return conditionFunc(func(conditions *Conditions) {
 		conditions.Not = not
+	})
+}
+
+func Parsed(parsed bool) Condition {
+	return conditionFunc(func(conditions *Conditions) {
+		conditions.Parsed = parsed
 	})
 }

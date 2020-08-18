@@ -11,7 +11,8 @@ func NewDebugContext(ctx context.Context, debug bool) context.Context {
 }
 
 func GetDebugFromContext(ctx context.Context) bool {
-	return ctx.Value(debugContextKey{}).(bool)
+	value, _ := ctx.Value(debugContextKey{}).(bool)
+	return value
 }
 
 type tableContextKey struct{}
@@ -21,5 +22,6 @@ func NewTableContext(ctx context.Context, name string) context.Context {
 }
 
 func GetTableFromContext(ctx context.Context) string {
-	return ctx.Value(tableContextKey{}).(string)
+	value, _ := ctx.Value(tableContextKey{}).(string)
+	return value
 }
