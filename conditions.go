@@ -23,6 +23,17 @@ func NewConditions(condition ...Condition) *Conditions {
 	return &conditions
 }
 
+func NewNilConditions(condition ...Condition) *Conditions {
+	if len(condition) == 0 {
+		return nil
+	}
+	conditions := Conditions{}
+	for _, item := range condition {
+		item.apply(&conditions)
+	}
+	return &conditions
+}
+
 func (conditions *Conditions) SetParsed(parsed bool) {
 	conditions.Parsed = parsed
 }
