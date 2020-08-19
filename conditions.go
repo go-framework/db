@@ -31,5 +31,8 @@ func (conditions *Conditions) NewPagination() *Pagination {
 	p := Pagination{
 		Offset: uint(conditions.Offset),
 	}
+	if p.Offset < 0 {
+		p.Offset = 0
+	}
 	return &p
 }
