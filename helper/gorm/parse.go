@@ -14,7 +14,7 @@ const (
 )
 
 func ParseQuery(db *gorm.DB, conditions *db.Conditions) *gorm.DB {
-	if conditions == nil{
+	if conditions == nil {
 		return db
 	}
 	if conditions.Parsed {
@@ -86,6 +86,11 @@ func ParseContext(ctx context.Context, db_ *gorm.DB) *gorm.DB {
 	if len(table) > 0 {
 		_db = _db.Table(table)
 		_db.InstantSet(TableNameKey, table)
+	}
+	// unscoped
+	unscoped := db.GetUnscopedFromContext(ctx)
+	if unscoped {
+		_db = _db.Unscoped()
 	}
 	return _db
 }

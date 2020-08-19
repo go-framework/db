@@ -25,3 +25,14 @@ func GetTableFromContext(ctx context.Context) string {
 	value, _ := ctx.Value(tableContextKey{}).(string)
 	return value
 }
+
+type unscopedContextKey struct{}
+
+func NewUnscopedContext(ctx context.Context, unscoped bool) context.Context {
+	return context.WithValue(ctx, unscopedContextKey{}, unscoped)
+}
+
+func GetUnscopedFromContext(ctx context.Context) bool {
+	value, _ := ctx.Value(unscopedContextKey{}).(bool)
+	return value
+}
