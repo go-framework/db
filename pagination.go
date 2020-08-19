@@ -4,7 +4,7 @@ package db
 type Pagination struct {
 	Total  uint        `json:"total"`
 	Count  uint        `json:"count"`
-	Offset uint        `json:"offset"`
+	Offset int         `json:"offset"`
 	Cursor interface{} `json:"cursor,omitempty"`
 }
 
