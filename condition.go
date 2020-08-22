@@ -71,3 +71,18 @@ func Parsed(parsed bool) Condition {
 		conditions.Parsed = parsed
 	})
 }
+
+func WithCondition(conditions *Conditions) Condition {
+	return conditionFunc(func(c *Conditions) {
+		c.Parsed = conditions.Parsed
+		c.Limit = conditions.Limit
+		c.Offset = conditions.Offset
+		c.Fields = conditions.Fields
+		c.Order = conditions.Order
+		c.GroupBy = conditions.GroupBy
+		c.Having = conditions.Having
+		c.And = conditions.And
+		c.Or = conditions.Or
+		c.Not = conditions.Not
+	})
+}
