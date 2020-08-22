@@ -74,6 +74,9 @@ func Parsed(parsed bool) Condition {
 
 func WithCondition(conditions *Conditions) Condition {
 	return conditionFunc(func(c *Conditions) {
+		if conditions == nil || c == nil {
+			return
+		}
 		c.Parsed = conditions.Parsed
 		c.Limit = conditions.Limit
 		c.Offset = conditions.Offset
