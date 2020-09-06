@@ -13,7 +13,11 @@ func Count(ctx context.Context, db *gorm.DB, object interface{}, conditions *db.
 	_db = ParseContext(ctx, db)
 	_db = ParseQuery(_db, conditions)
 
-	err = _db.Model(object).Limit(-1).Offset(-1).Count(&total).Error
+	if _, ok := _db.Get(TableNameKey); !ok {
+		_db = _db.Model(object)
+	}
+
+	err = _db.Limit(-1).Offset(-1).Count(&total).Error
 	if err == sql.ErrNoRows || total == 0 {
 		err = nil
 		return
@@ -25,7 +29,10 @@ func List(ctx context.Context, db *gorm.DB, list interface{}, conditions *db.Con
 	_db = ParseContext(ctx, db)
 	_db = ParseQuery(_db, conditions)
 
-	_db = _db.Model(list)
+	if _, ok := _db.Get(TableNameKey); !ok {
+		_db = _db.Model(list)
+	}
+
 	err = _db.Limit(-1).Offset(-1).Count(&total).Error
 	if err == sql.ErrNoRows || total == 0 {
 		err = nil
@@ -40,7 +47,10 @@ func One(ctx context.Context, db *gorm.DB, object interface{}, conditions *db.Co
 	_db = ParseContext(ctx, db)
 	_db = ParseQuery(_db, conditions)
 
-	_db = _db.Model(object)
+	if _, ok := _db.Get(TableNameKey); !ok {
+		_db = _db.Model(object)
+	}
+
 	err = _db.First(object).Error
 	return
 }

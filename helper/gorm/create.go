@@ -9,6 +9,10 @@ import (
 func Create(ctx context.Context, db *gorm.DB, data interface{}) (_db *gorm.DB, err error) {
 	_db = ParseContext(ctx, db)
 
-	err = _db.Model(data).Create(data).Error
+	if _, ok := _db.Get(TableNameKey); !ok {
+		_db = _db.Model(data)
+	}
+
+	err = _db.Create(data).Error
 	return
 }

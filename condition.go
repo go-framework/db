@@ -36,9 +36,9 @@ func Order(order ...string) Condition {
 	})
 }
 
-func GroupBy(groupBy ...string) Condition {
+func Group(group ...string) Condition {
 	return conditionFunc(func(conditions *Conditions) {
-		conditions.GroupBy = groupBy
+		conditions.Group = group
 	})
 }
 
@@ -82,7 +82,7 @@ func WithCondition(conditions *Conditions) Condition {
 		c.Offset = conditions.Offset
 		c.Fields = conditions.Fields
 		c.Order = conditions.Order
-		c.GroupBy = conditions.GroupBy
+		c.Group = conditions.Group
 		c.Having = conditions.Having
 		c.And = conditions.And
 		c.Or = conditions.Or

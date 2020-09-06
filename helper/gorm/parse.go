@@ -38,8 +38,8 @@ func ParseQuery(db *gorm.DB, conditions *db.Conditions) *gorm.DB {
 	if len(conditions.Order) > 0 {
 		_db = _db.Order(strings.Join(conditions.Order, ","))
 	}
-	if len(conditions.GroupBy) > 0 {
-		_db = _db.Group(strings.Join(conditions.GroupBy, ","))
+	if len(conditions.Group) > 0 {
+		_db = _db.Group(strings.Join(conditions.Group, ","))
 	}
 
 	switch len(conditions.Having) {

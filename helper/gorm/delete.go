@@ -15,6 +15,7 @@ func Delete(ctx context.Context, in *gorm.DB, data interface{}, conditions *db.C
 	if _, ok := _db.Get(TableNameKey); !ok {
 		_db = _db.Model(data)
 	}
+
 	err = _db.Delete(data).Error
 	return
 }
