@@ -85,7 +85,7 @@ func ParseContext(ctx context.Context, db_ *gorm.DB) *gorm.DB {
 	table := db.GetTableFromContext(ctx)
 	if len(table) > 0 {
 		_db = _db.Table(table)
-		_db.InstantSet(TableNameKey, table)
+		_db = _db.InstantSet(TableNameKey, table)
 	}
 	// unscoped
 	unscoped := db.GetUnscopedFromContext(ctx)

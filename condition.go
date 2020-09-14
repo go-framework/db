@@ -24,6 +24,18 @@ func Offset(offset int) Condition {
 	})
 }
 
+func Match(match string) Condition {
+	return conditionFunc(func(conditions *Conditions) {
+		conditions.Match = match
+	})
+}
+
+func Cursor(cursor interface{}) Condition {
+	return conditionFunc(func(conditions *Conditions) {
+		conditions.Cursor = cursor
+	})
+}
+
 func Fields(fields ...string) Condition {
 	return conditionFunc(func(conditions *Conditions) {
 		conditions.Fields = fields
@@ -66,6 +78,12 @@ func Not(not ...interface{}) Condition {
 	})
 }
 
+func Between(start, end interface{}) Condition {
+	return conditionFunc(func(conditions *Conditions) {
+		conditions.Between = [2]interface{}{start, end}
+	})
+}
+
 func Parsed(parsed bool) Condition {
 	return conditionFunc(func(conditions *Conditions) {
 		conditions.Parsed = parsed
@@ -80,6 +98,8 @@ func WithCondition(conditions *Conditions) Condition {
 		c.Parsed = conditions.Parsed
 		c.Limit = conditions.Limit
 		c.Offset = conditions.Offset
+		c.Match = conditions.Match
+		c.Cursor = conditions.Cursor
 		c.Fields = conditions.Fields
 		c.Order = conditions.Order
 		c.Group = conditions.Group
@@ -87,5 +107,6 @@ func WithCondition(conditions *Conditions) Condition {
 		c.And = conditions.And
 		c.Or = conditions.Or
 		c.Not = conditions.Not
+		c.Between = conditions.Between
 	})
 }
