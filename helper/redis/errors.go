@@ -10,7 +10,7 @@ type NotExistError struct {
 }
 
 func (e NotExistError) Error() string {
-	return fmt.Sprintf("key %s not exist", e.Key)
+	return fmt.Sprintf("key: %s is not exist", e.Key)
 }
 
 type RedisError struct {
@@ -20,7 +20,7 @@ type RedisError struct {
 }
 
 func (e RedisError) Error() string {
-	return fmt.Sprintf("%s %s error %v", e.Operate, e.Key, e.Err)
+	return fmt.Sprintf("%s key: %s error: %v", e.Operate, e.Key, e.Err)
 }
 
 type RedisErrors []error

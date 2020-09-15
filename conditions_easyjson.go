@@ -40,6 +40,8 @@ func easyjson53ae5e32DecodeGithubComGoFrameworkDb(in *jlexer.Lexer, out *Conditi
 			out.Limit = int(in.Int())
 		case "offset":
 			out.Offset = int(in.Int())
+		case "match":
+			out.Match = string(in.String())
 		case "cursor":
 			if m, ok := out.Cursor.(easyjson.Unmarshaler); ok {
 				m.UnmarshalEasyJSON(in)
@@ -289,6 +291,16 @@ func easyjson53ae5e32EncodeGithubComGoFrameworkDb(out *jwriter.Writer, in Condit
 			out.RawString(prefix)
 		}
 		out.Int(int(in.Offset))
+	}
+	if in.Match != "" {
+		const prefix string = ",\"match\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.Match))
 	}
 	if in.Cursor != nil {
 		const prefix string = ",\"cursor\":"

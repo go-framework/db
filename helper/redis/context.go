@@ -24,3 +24,14 @@ func GetExpireFromContext(ctx context.Context) (expire time.Duration, ok bool) {
 	expire, ok = ctx.Value(durationContextKey{}).(time.Duration)
 	return
 }
+
+type scanKeysFuncContextKey struct{}
+
+func NewScanKeyFuncContext(ctx context.Context, f ScanKeysFunc) context.Context {
+	return context.WithValue(ctx, scanKeysFuncContextKey{}, f)
+}
+
+func GetScanKeyFuncFromContext(ctx context.Context) (f ScanKeysFunc, ok bool) {
+	f, ok = ctx.Value(scanKeysFuncContextKey{}).(ScanKeysFunc)
+	return
+}

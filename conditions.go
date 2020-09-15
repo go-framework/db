@@ -59,23 +59,31 @@ type Conditions struct {
 	Between [2]interface{} `json:"between,omitempty" form:"not"`
 }
 
-func NewConditions(condition ...Condition) *Conditions {
-	conditions := Conditions{}
-	for _, item := range condition {
-		item.apply(&conditions)
+func GetDefaultConditions() *Conditions {
+	conditions := Conditions{
+		Limit:  20,
+		Offset: 0,
 	}
 	return &conditions
+}
+
+func NewConditions(condition ...Condition) *Conditions {
+	conditions := GetDefaultConditions()
+	for _, item := range condition {
+		item.apply(conditions)
+	}
+	return conditions
 }
 
 func NewNilConditions(condition ...Condition) *Conditions {
 	if len(condition) == 0 {
 		return nil
 	}
-	conditions := Conditions{}
+	conditions := GetDefaultConditions()
 	for _, item := range condition {
-		item.apply(&conditions)
+		item.apply(conditions)
 	}
-	return &conditions
+	return conditions
 }
 
 func (conditions *Conditions) SetParsed(parsed bool) {

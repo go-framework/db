@@ -7,7 +7,3 @@ type MapMarshaler interface {
 type MapUnmarshaler interface {
 	UnmarshalMap(map[string]string) error
 }
-
-type MapUnmarshalCloner interface {
-	CloneMapUnmarshaler() MapUnmarshaler
-}

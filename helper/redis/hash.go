@@ -3,6 +3,7 @@ package redis
 import (
 	"context"
 	"errors"
+	"strings"
 
 	"github.com/go-redis/redis/v8"
 
@@ -45,15 +46,25 @@ func HashGetOne(ctx context.Context, rdb *redis.Client, key string, data MapUnma
 	return data.UnmarshalMap(value)
 }
 
+func ScanKeys(ctx context.Context, rdb *redis.Client, cursor uint64, match string, count int64) ([]string, uint64, error) {
+	return rdb.Scan(ctx, cursor, match, count).Result()
+}
+
 // HashGetList list redis key object not hash field
 func HashGetList(ctx context.Context, rdb *redis.Client, list interface{}, conditions *db.Conditions) (pagination *db.Pagination, err error) {
+	if list == nil {
+		return pagination, errors.New("parameter: list is nil")
+	}
 	if conditions == nil {
 		return pagination, errors.New("parameter: *db.Conditions is nil")
 	}
 	if len(conditions.Match) == 0 {
-		return pagination, errors.New("match condition is not set")
+		return pagination, errors.New("conditions: match field is not set")
 	}
-
+	// set default
+	if conditions.Limit <= 0 {
+		conditions.Limit = 10
+	}
 	var (
 		keys    []string
 		value   map[string]string
@@ -67,12 +78,21 @@ func HashGetList(ctx context.Context, rdb *redis.Client, list interface{}, condi
 	// just support UnmarshalMap
 	mapUnmarshaler, ok := list.(MapUnmarshaler)
 	if !ok {
-		return pagination, errors.New("list have not impl MapUnmarshaler interface")
+		return pagination, errors.New("list have not implement MapUnmarshaler interface")
+	}
+
+	var (
+		scanKeyFunc = ScanKeys
+	)
+
+	// get ScanKeyFunc from context
+	if f, ok := GetScanKeyFuncFromContext(ctx); ok {
+		scanKeyFunc = f
 	}
 
 	for {
 		// scan match keys
-		keys, cursor, err = rdb.Scan(ctx, cursor, conditions.Match, count).Result()
+		keys, cursor, err = scanKeyFunc(ctx, rdb, cursor, conditions.Match, count)
 		if err != nil {
 			return
 		}
@@ -85,15 +105,16 @@ func HashGetList(ctx context.Context, rdb *redis.Client, list interface{}, condi
 			// get all hash fields
 			value, err = rdb.HGetAll(ctx, key).Result()
 			if err != nil {
-				return
-			}
-			// key is not exist
-			if value == nil || len(value) == 0 {
-				err = &NotExistError{
-					Key: key,
+				// wrong type error
+				if strings.Contains(err.Error(), "WRONGTYPE") {
+					errs = append(errs, &RedisError{
+						Key:     key,
+						Operate: "HGetAll",
+						Err:     err.Error(),
+					})
+					continue
 				}
-				errs = append(errs, err)
-				continue
+				return
 			}
 			// map unmarshal
 			err = mapUnmarshaler.UnmarshalMap(value)
@@ -103,6 +124,7 @@ func HashGetList(ctx context.Context, rdb *redis.Client, list interface{}, condi
 					Operate: "UnmarshalMap",
 					Err:     err.Error(),
 				})
+				continue
 			}
 		}
 		if cursor == 0 {
