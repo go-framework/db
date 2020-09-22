@@ -6,7 +6,7 @@ package db
 // swagger:model Conditions
 type Conditions struct {
 	// Parse this Conditions flag.
-	Parsed bool `json:"-"`
+	Parsed bool `json:"-" form:"-"`
 
 	// Limit record
 	//
@@ -19,7 +19,7 @@ type Conditions struct {
 	// Type: integer
 	Offset int `json:"offset,omitempty" form:"offset"`
 	// Match
-	Match string `json:"match,omitempty" form:"offset"`
+	Match string `json:"match,omitempty" form:"match"`
 	// Cursor
 	//
 	// if exist Cursor set back.
@@ -56,7 +56,7 @@ type Conditions struct {
 	// Not list
 	Not []interface{} `json:"not,omitempty" form:"not"`
 	// Between
-	Between [2]interface{} `json:"between,omitempty" form:"not"`
+	Between [2]interface{} `json:"between,omitempty" form:"between"`
 }
 
 func GetDefaultConditions() *Conditions {
