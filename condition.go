@@ -86,7 +86,7 @@ func Between(start, end interface{}) Condition {
 
 func Parsed(parsed bool) Condition {
 	return conditionFunc(func(conditions *Conditions) {
-		conditions.Parsed = parsed
+		conditions.parsed = parsed
 	})
 }
 
@@ -95,7 +95,7 @@ func WithCondition(conditions *Conditions) Condition {
 		if conditions == nil || c == nil {
 			return
 		}
-		c.Parsed = conditions.Parsed
+		c.parsed = conditions.parsed
 		c.Limit = conditions.Limit
 		c.Offset = conditions.Offset
 		c.Match = conditions.Match

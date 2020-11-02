@@ -17,11 +17,11 @@ func ParseQuery(db *gorm.DB, conditions *db.Conditions) *gorm.DB {
 	if conditions == nil {
 		return db
 	}
-	if conditions.Parsed {
+	if conditions.GetParsed() {
 		return db
 	}
 	defer func() {
-		conditions.Parsed = true
+		conditions.SetParsed(true)
 	}()
 
 	var _db *gorm.DB = db

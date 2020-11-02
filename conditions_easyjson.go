@@ -274,12 +274,8 @@ func easyjson53ae5e32EncodeGithubComGoFrameworkDb(out *jwriter.Writer, in Condit
 	_ = first
 	if in.Limit != 0 {
 		const prefix string = ",\"limit\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
+		first = false
+		out.RawString(prefix[1:])
 		out.Int(int(in.Limit))
 	}
 	if in.Offset != 0 {

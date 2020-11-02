@@ -5,8 +5,8 @@ package db
 // Conditions
 // swagger:model Conditions
 type Conditions struct {
-	// Parse this Conditions flag.
-	Parsed bool `json:"-" form:"-"`
+	// parse this Conditions flag.
+	parsed bool `json:"-" form:"-"`
 
 	// Limit record
 	//
@@ -87,7 +87,11 @@ func NewNilConditions(condition ...Condition) *Conditions {
 }
 
 func (conditions *Conditions) SetParsed(parsed bool) {
-	conditions.Parsed = parsed
+	conditions.parsed = parsed
+}
+
+func (conditions Conditions) GetParsed() bool {
+	return conditions.parsed
 }
 
 func (conditions *Conditions) NewPagination() *Pagination {
